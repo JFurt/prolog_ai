@@ -1,0 +1,59 @@
+Compactador:
+
+As seguintes funções foram implementadas:
+
+
+-----------------------------------------------------------------------------
+unsigned int partition(Tree **vTrees, int ini,  int end)
+void quick_sort(Tree **vTrees, int ini,int end)
+
+implementam o algoritmo de ordenação quicksort e são usadas para ordenar 
+o vetor de árvores (para posteriormente encontrar a codificação de huffman)
+-----------------------------------------------------------------------------
+void create_forest(Tree **vTrees, Table *table, unsigned int size)
+void insert(Tree **vTrees, Tree *newTree, unsigned int size)
+
+São usadas para criar o vetor de árvores (a partir da tabela) e posteriormente
+inserir novas árvores em um vetor já ordenado
+------------------------------------------------------------------------------
+void code_rec(Node *n, bits V,unsigned int h)
+void generate_code(Node *n,unsigned int b)
+
+São usadas para gerar a codificação a partir da árvore final (p/ esquerda é 0 e p/ direita é 1)
+------------------------------------------------------------------------------
+unsigned int huff(Table *table, unsigned int b,unsigned int size_table)
+
+Função que chama todas as funções acima para, a partir de uma tabela de frequências gerar
+uma codificação ótima de huffman.
+--------------------------------------------------------------------------------------------------
+unsigned int equal_bit(bits *c1,bits *c2,unsigned int b)
+
+Função que compara duas estruturas de dados bits (um vetor de estruturas bit, que contém
+um unsigned int de tamanho 1);
+---------------------------------------------------------------------------------------------------
+unsigned int print_out_file(FILE *in, FILE *out, Table *table, unsigned int b, unsigned int size_table,fpos_t *pos)
+
+Função que percorre o arquivo de entrada compactando-o para a codificação nova e escrevendo-o no arquivo
+de saída.
+----------------------------------------------------------------------------------------------------
+unsigned char *monta_str_out(Cell c, unsigned int b, unsigned char *s,unsigned int *size)
+
+Função que é usada para montar uma linha da tabela que será escrita no arquivo compactado
+para que o descompactador possa extrair o arquivo original.
+----------------------------------------------------------------------------------------------------
+unsigned int le_bits(FILE *in, Cell *N, Cell *Resto,unsigned int offset,unsigned int b, unsigned int *size_resto)
+
+Função que lê b bits do arquivo in, e armazena em N, com offset, os primeiros b bits lidos, porém, como
+a leitura é feita byte a byte, pode ser que alguns size_resto bits sobram (a quantidade b já foi atingida, porém ainda restam
+bits que foram lidos) e são armazenados em Resto.
+----------------------------------------------------------------------------------------------------
+void le_tabela(Table *table, FILE *in,unsigned int b, unsigned int size_table)
+
+Função usada pelo descompactador para ler e montar a tabela de tradução.
+-----------------------------------------------------------------------------------------------------
+void translate(FILE *in,FILE *out,Table *table, unsigned int b, unsigned int size_table,unsigned char *quebra_bin,unsigned char *quebra_in)
+
+Principal função do descompactador que percorre o arquivo in traduzindo-o para o arquivo out, onde cada célula da tabela traduzida
+tem b bits. As strings quebra_bin e quebra_in são respectivamente: string que indica os bits que não puderam ser escritos no arquivo
+compactado pois não fechavam 8 bits (um char), string que indica os bits do arquivo de entrada da compactação que não puderam ser
+codificados, pois o número b de bits não era divisor do número total de bits do arquivo.
