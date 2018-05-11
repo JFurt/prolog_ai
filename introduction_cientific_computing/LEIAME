@@ -1,0 +1,52 @@
+Resolução de uma equação diferencial parcial de segunda ordem usando diferenças finitas
+através dos métodos de Gauss-Seidel e Successive Over Relaxation.
+
+Diretorios:
+    T1: Contém os arquivos do primeiro trabalho da disciplina.
+    T2: Contém os arquivos do segundo trabalho da disciplina.
+    T2_Likwid: Contém os arquivos do segundo trabalho da disciplina
+                com as chamadas a biblioteca do Likwid para analise de FLOPS
+    aux: Scripts para execução de diversas instâncias dos programas
+
+Arquivos:
+   main.c: Contém TODO o código do programa que resolve a equação diferencial
+           por diferenças finitas.
+           Funções: timestamp (fornecido pelo professor para medir tempo de execução)
+                    createScript: Cria script do gnuplot que plota o gráfico dos pontos resultantes
+                                  das iterações realizadas no programa.
+   Makefile: Responsável por compilar o programa.
+   LEIAME: Informações sobre o programa.
+
+Os valores de f (constantes) foram calculados ANTES do início das iterações e armazenados
+em um vetor de tamanho Nx * Ny ~~ LOOKUP TABLE
+
+A discretização do espaço [0,1]x[0,2] foi armazenada em um vetor de tamanho Nx * Ny.
+
+Como, o acesso a discretização u é feita em forma de matriz, uma macro IND(i,j) foi
+criada para transformar os índices i,j de uma matriz em um índice único para o vetor.
+
+O cálculo do resíduo (necessário a cada iteração, segundo especificação) foi calculado usando a norma L2
+da diferença entre a 'aplicação' da discretização u na equação diferencial e os valores de f. Tal processo
+se repete em TODA iteração.
+
+- Observação 1:Existem outras maneiras APROXIMADAS de calcular o resíduo de uma maneira mais eficiente, porém
+como o resíduo 'exato' foi exigido, elas não foram empregadas.
+
+Todas as divisões no núcelo do algoritmo foram substituidas por multiplicações por valores invertidos armazenados
+em variáveis.
+
+Todas as matrizes foram armazenadas como vetor para utilizar o pre-fetch.
+
+O laço que percorre a discretização u, a percorre em LINHA.
+
+- Observação 2: O método de Successive Over Relaxation apresenta uma convergência INFERIOR ao método de Gauss-Seidel
+
+- Observação 3: Caso deseje plotar os dados de saída do programa, por favor, descomente a chamada da função createScript
+no final da função principal do programa. 
+DEPENDENDO DA MANEIRA COMO OS DADOS SÃO PLOTADOS, O GNUPLOT ARREDONDA OS DADOS DA BORDA, MOSTRANDO INFORMAÇÕES INCORRETAS.
+
+- Observação 3: O método SOR foi implementado usando o w = (2 - (hx+hy))/2 ao invés de 2 - (hx+hy)/2, pois o 
+algorimo NÃO CONVERGIU usando o segundo valor.
+
+- Observação 3: O método SOR apresentou um desempenho (tempo de execução e convergencia) PIOR do que o gauss seidel, que
+convergiu, na maioria dos testes,em 14 iterações.
